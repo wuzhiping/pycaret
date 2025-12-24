@@ -1,0 +1,43 @@
+FROM  swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04
+# nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Shanghai
+
+# 1. 基础依赖
+RUN apt-get update && apt-get install -y \
+    python3.10 \
+    python3-pip \
+    python3-dev \
+    git \
+    build-essential \
+    wget \
+    curl \
+    libgl1 \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
+# 2. pip 升级
+RUN pip install --upgrade pip
+
+# 3. 安装 PyTorch GPU（⚠️版本一定要和 CUDA 匹配）
+RUN pip install torch torchvision torchaudio \
+    --index-url https://download.pytorch.org/whl/cu121
+
+# 4. 安装 PyCaret（全功能）
+RUN pip install pycaret[full]
+
+# 5. 安装 GPU 版本的 ML 库
+RUN pip install \
+    lightgbm \
+    xgboost \
+    catboost
+
+# 6. Jupyter
+RUN pip install jupyterlab
+
+WORKDIR /workspace
+EXPOSE 8888
+
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--no-browser"]
