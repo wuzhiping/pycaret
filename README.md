@@ -2,7 +2,9 @@
 <pre>
 docker run --cpus="4.5" --rm -it -p 15041:8888 -p 15042:5000 \
                                    -v $(pwd):/home/jovyan/src  shawoo/mlflow \
-                                   bash -c "jupyter lab --allow-root --ip=0.0.0.0 --ServerApp.base_url=/books --NotebookApp.token=12345678"
+                                   bash -c "jupyter lab --allow-root --ip=0.0.0.0 \
+                                                        --ServerApp.base_url=/books \
+                                                        --NotebookApp.token=12345678"
 
 </pre>
 
