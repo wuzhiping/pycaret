@@ -49,3 +49,10 @@ mlflow server --host 0.0.0.0
               count: "all"
               capabilities: ["gpu"]
 </pre>
+
+pre>
+docker run --name mineru -it -d \
+  --gpus all \
+  -p 8000:8000 \
+  shawoo/mineru:2.1.7
+</pre>
