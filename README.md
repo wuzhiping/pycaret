@@ -50,7 +50,7 @@ mlflow server --host 0.0.0.0
               capabilities: ["gpu"]
 </pre>
 
-pre>
+<pre>
 docker run --name mineru -it -d \
   --gpus all \
   -p 8000:8000 \
