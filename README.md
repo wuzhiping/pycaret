@@ -17,3 +17,35 @@ docker run -it --rm \
 </pre>
 
 mlflow server --host 0.0.0.0
+
+
+<pre>
+  ollama:
+    #image: ollama/ollama:0.13.5
+    build: ./ollama
+    restart: always
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: "nvidia"
+              count: "all"
+              capabilities: ["gpu"]
+
+  mineru:
+    image: shawoo/mineru:2.1.7
+    restart: always
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: "nvidia"
+              count: "all"
+              capabilities: ["gpu"]
+</pre>
