@@ -13,7 +13,8 @@ docker run -it --rm \
   --gpus all \
   -p 8888:8888 \
   -v $(pwd):/workspace \
-  shawoo/caret:cuda
+  -w /workspace \
+  shawoo/pycaret:gpu
 </pre>
 
 mlflow server --host 0.0.0.0
