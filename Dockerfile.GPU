@@ -1,45 +1,12 @@
-FROM  swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04
-# nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04
+FROM cschranz/gpu-jupyter:v1.6_cuda-12.0_ubuntu-22.04
+WORKDIR /home/jovyan/work
+ENV GRANT_SUDO=yes
+ENV JUPYTER_ENABLE_LAB=yes
+user root
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=Asia/Shanghai
-
-# 1. 基础依赖
-RUN apt-get update && apt-get install -y \
-    python3.11 \
-    python3-pip \
-    python3-dev \
-    git \
-    build-essential \
-    wget \
-    curl \
-    libgl1 \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN ln -s /usr/bin/python3.11 /usr/bin/python
-
-# 6. Jupyter
-RUN pip install jupyterlab
-
-# 2. pip 升级
-RUN pip install --upgrade pip
-
-# 3. 安装 PyTorch GPU（⚠️版本一定要和 CUDA 匹配）
-RUN pip install torch torchvision torchaudio \
-    --index-url https://download.pytorch.org/whl/cu121
-
-# 5. 安装 GPU 版本的 ML 库
-RUN pip install \
-    lightgbm \
-    xgboost \
-    catboost
-
-# 4. 安装 PyCaret（全功能）
-RUN pip install pycaret[full]
-
-
-
-WORKDIR /workspace
-EXPOSE 8888
-
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--no-browser"]
+RUN apt update && apt install -y python3 python3-pip libgomp1
+RUN pip install --upgrade setuptools pip
+RUN pip install pycaret[analysis,models,mlops] --ignore-installed PyYAML==6.0.1
+RUN pip uninstall mlflow -y
+RUN pip install mlflow==2.7.1
+RUN pip install temporalio
